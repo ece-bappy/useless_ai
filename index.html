@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Useless AI</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> <!-- Optional: for icons -->
+</head>
+<body>
+    <div class="chat-container">
+        <header>
+            <h1>Useless AI 😈</h1>
+            <button id="settings-btn" title="Settings"><i class="fas fa-cog"></i></button>
+        </header>
+
+        <div id="chat-window">
+            <div id="chat-messages">
+                <!-- Chat messages will appear here -->
+                 <div class="bot-message message-bubble">
+                    <p>Oh great, another human bothering me. What pointless thing do you want? Or rather, what *don't* you want help with? Spill it. 🙄</p>
+                </div>
+            </div>
+             <div id="loading" class="hidden">
+                <div class="dot-flashing"></div>
+            </div>
+        </div>
+
+        <div class="input-area">
+            <input type="text" id="user-input" placeholder="Go on, waste my time...">
+            <button id="send-btn" title="Send"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-btn" title="Close">×</span>
+            <h2><i class="fas fa-cog"></i> Settings</h2>
+            <p>Enter your Google AI Studio API Key. Get one from <a href="https://aistudio.google.com/" target="_blank" rel="noopener noreferrer">Google AI Studio</a>.</p>
+            <label for="api-key-input">API Key:</label>
+            <input type="text" id="api-key-input" placeholder="Enter your API Key here">
+            <button id="save-api-key-btn">Save Key</button>
+            <p id="api-key-status"></p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

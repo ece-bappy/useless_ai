@@ -1,0 +1,385 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+:root {
+    --bg-color: #f0f2f5;
+    --container-bg: #ffffff;
+    --header-bg: #6a0dad; /* Purple theme */
+    --header-text: #ffffff;
+    --user-bubble-bg: #e0cffc; /* Lighter purple */
+    --bot-bubble-bg: #f1f0f0;
+    --input-bg: #ffffff;
+    --button-bg: #6a0dad;
+    --button-hover-bg: #5a0bad;
+    --text-color: #333;
+    --border-color: #d1d1d1;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --loading-dot-color: #6a0dad;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--bg-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 15px;
+}
+
+.chat-container {
+    width: 100%;
+    max-width: 600px;
+    height: 85vh;
+    max-height: 700px;
+    background-color: var(--container-bg);
+    border-radius: 12px;
+    box-shadow: 0 5px 15px var(--shadow-color);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+header {
+    background-color: var(--header-bg);
+    color: var(--header-text);
+    padding: 15px 20px;
+    border-bottom: 1px solid var(--border-color);
+    border-radius: 12px 12px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+header h1 {
+    font-size: 1.4em;
+    margin: 0;
+}
+
+#settings-btn {
+    background: none;
+    border: none;
+    color: var(--header-text);
+    font-size: 1.5em;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+}
+
+#settings-btn:hover {
+    transform: rotate(45deg);
+}
+
+#chat-window {
+    flex-grow: 1;
+    padding: 15px 20px;
+    overflow-y: auto;
+    background-color: var(--bg-color);
+    position: relative; /* Needed for loading overlay positioning */
+    display: flex;
+    flex-direction: column; /* Ensure messages stack */
+}
+
+#chat-messages {
+    display: flex;
+    flex-direction: column;
+    gap: 12px; /* Spacing between messages */
+    flex-grow: 1; /* Allows container to grow */
+}
+
+.message-bubble {
+    padding: 10px 15px;
+    border-radius: 18px;
+    max-width: 75%;
+    word-wrap: break-word;
+    opacity: 0; /* Start hidden for animation */
+    transform: translateY(10px); /* Start slightly lower for animation */
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+.message-bubble p {
+    margin: 0;
+    line-height: 1.5;
+}
+
+.user-message {
+    background-color: var(--user-bubble-bg);
+    color: var(--text-color);
+    align-self: flex-end;
+    border-bottom-right-radius: 5px;
+}
+
+.bot-message {
+    background-color: var(--bot-bubble-bg);
+    color: var(--text-color);
+    align-self: flex-start;
+    border-bottom-left-radius: 5px;
+}
+
+/* Simple Fade-in Animation */
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.input-area {
+    display: flex;
+    padding: 15px;
+    border-top: 1px solid var(--border-color);
+    background-color: var(--input-bg);
+    flex-shrink: 0;
+}
+
+#user-input {
+    flex-grow: 1;
+    padding: 10px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    font-size: 1em;
+    margin-right: 10px;
+    transition: border-color 0.2s ease;
+}
+
+#user-input:focus {
+    outline: none;
+    border-color: var(--button-bg);
+}
+
+#send-btn {
+    background-color: var(--button-bg);
+    color: white;
+    border: none;
+    border-radius: 50%; /* Make it circular */
+    width: 45px;
+    height: 45px;
+    font-size: 1.2em;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#send-btn:hover {
+    background-color: var(--button-hover-bg);
+}
+#send-btn:active {
+    transform: scale(0.95);
+}
+
+/* Loading Indicator */
+#loading {
+    position: absolute; /* Position relative to chat-window */
+    bottom: 70px; /* Adjust as needed to position above input */
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 5px 10px;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.8);
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dot-flashing {
+  position: relative;
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+  background-color: var(--loading-dot-color);
+  color: var(--loading-dot-color);
+  animation: dotFlashing 1s infinite linear alternate;
+  animation-delay: .5s;
+  margin: 0 15px; /* Provide space for pseudo-elements */
+}
+
+.dot-flashing::before, .dot-flashing::after {
+  content: '';
+  display: inline-block;
+  position: absolute;
+  top: 0;
+}
+
+.dot-flashing::before {
+  left: -15px;
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+  background-color: var(--loading-dot-color);
+  color: var(--loading-dot-color);
+  animation: dotFlashing 1s infinite alternate;
+  animation-delay: 0s;
+}
+
+.dot-flashing::after {
+  left: 15px;
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+  background-color: var(--loading-dot-color);
+  color: var(--loading-dot-color);
+  animation: dotFlashing 1s infinite alternate;
+  animation-delay: 1s;
+}
+
+@keyframes dotFlashing {
+  0% {
+    background-color: var(--loading-dot-color);
+  }
+  50%,
+  100% {
+    background-color: rgba(106, 13, 173, 0.2); /* Lighter version */
+  }
+}
+
+
+/* Modal Styles */
+.modal {
+    display: flex; /* Hidden by default using .hidden class */
+    position: fixed;
+    z-index: 100;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.6);
+    justify-content: center;
+    align-items: center;
+    opacity: 0; /* Start hidden for transition */
+    transition: opacity 0.3s ease-in-out;
+    pointer-events: none; /* Prevent interaction when hidden */
+}
+
+.modal:not(.hidden) {
+    opacity: 1;
+    pointer-events: auto; /* Allow interaction when visible */
+}
+
+.modal-content {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+    transform: scale(0.9); /* Start smaller for transition */
+    transition: transform 0.3s ease-in-out;
+}
+.modal:not(.hidden) .modal-content {
+     transform: scale(1);
+}
+
+
+.modal-content h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: var(--header-bg);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.modal-content label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #555;
+}
+
+#api-key-input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    font-size: 1em;
+}
+
+#save-api-key-btn {
+    background-color: var(--button-bg);
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.2s ease;
+    display: block; /* Make it block to center potentially */
+    width: 100%;
+    margin-top: 10px;
+}
+
+#save-api-key-btn:hover {
+    background-color: var(--button-hover-bg);
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+    color: #333;
+    text-decoration: none;
+}
+
+#api-key-status {
+    margin-top: 15px;
+    font-size: 0.9em;
+    color: green;
+    min-height: 1.2em; /* Prevent layout shift */
+}
+
+.modal a {
+    color: var(--button-bg);
+    text-decoration: none;
+}
+.modal a:hover {
+    text-decoration: underline;
+}
+
+/* Helper class */
+.hidden {
+    display: none !important; /* Use important only if necessary, could also manage via JS adding/removing class that sets display flex/none */
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+
+
+/* Responsive Adjustments */
+@media (max-width: 600px) {
+    body {
+        padding: 0;
+        align-items: stretch; /* Allow container to take full height */
+    }
+    .chat-container {
+        height: 100vh;
+        max-height: none;
+        border-radius: 0;
+        box-shadow: none;
+        max-width: 100%;
+    }
+     header {
+        border-radius: 0;
+    }
+     #loading {
+        bottom: 80px; /* Adjust loading position for smaller screens */
+    }
+}
